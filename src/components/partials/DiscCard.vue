@@ -18,7 +18,7 @@ export default {
 }
 </script>
 
-<style lang="scss" scope>
+<style lang="scss" scoped>
 @import '../../style/variables.scss';
 .card {
     width: 100%;
