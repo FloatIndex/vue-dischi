@@ -1,7 +1,8 @@
 <template>
   <div id="app">
-    <MyHeader :genres='genresList'/>
-    <MyMain @genresReady='getGenresList'/>
+    <!-- genresList passato tramite props genres a header -->
+    <MyHeader :genres='genresList' @changedGenre='startSearch'/>
+    <MyMain @genresReady='getGenresList' :genreToSearch='genreToSearch'/>
   </div>
 </template>
 
@@ -17,12 +18,19 @@ export default {
   },
   data() {
     return {
-      genresList: []
+      genresList: [],
+      genreToSearch: ''
     }
   },
   methods: {
-    getGenresList(genresList) {
-      this.genresList = genresList;
+    //l'argomento genresFromMain della funzione è passato direttamente dall'evento genresReady del main
+    getGenresList(genresFromMain) {
+      this.genresList = genresFromMain;
+    },
+
+    //l'argomento genreFilterFromHeader della funzione è passato direttamente dall'evento changedGenre dell'header
+    startSearch(genreFilterFromHeader) {
+      this.genreToSearch = genreFilterFromHeader;
     }
   }
 }

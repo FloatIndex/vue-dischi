@@ -1,6 +1,17 @@
 <template>
   <div>
-      <select @change="$emit('changedGenre', search)"></select>
+        <!--
+            v-model nella select crea un binding tra il valore selezionato e il dato selectedGenre
+            @change emette l'evente changedGenre al cambiare del valore selezionato, passando come parametro il dato selectedGenre 
+        -->
+        <select v-model="selectedGenre" @change="$emit('changedGenre', selectedGenre)">
+            <option value="">Seleziona genere</option>
+            <option
+                v-for="(genre, index) in genresList" :key="index"
+                :value="genre">
+                {{genre}}
+            </option>
+        </select>
   </div>
 </template>
 
@@ -12,7 +23,7 @@ export default {
     },
     data() {
         return {
-            
+            selectedGenre: ''
         }
     },
     methods: {
@@ -20,7 +31,7 @@ export default {
         //     this.$emit("changedGenre", this.search);
         //     console.log("Il figlio passa: " + this.search);
         // }
-    }
+    },
 }
 </script>
 

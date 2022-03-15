@@ -3,7 +3,7 @@
         <div class="container">
             
             <div class="row gy-3 row-cols-1 row-cols-sm-2 row-cols-lg-4 row-cols-xl-5">
-                <div class="col" v-for="(disc, index) in discList" :key="index">
+                <div class="col" v-for="(disc, index) in filteredDiscList" :key="index">
                     <DiscCard :disc="disc"/>
                 </div>
             </div>
@@ -18,6 +18,9 @@ import LoadingInProgress from './partials/LoadingInProgress.vue';
 
 export default {
     name: 'MyMain',
+    props: {
+        genreToSearch: String
+    },
     components: {
         DiscCard,
         LoadingInProgress
@@ -25,8 +28,19 @@ export default {
     data() {
         return {
             discList: [],
-            genresList: [],
+            genres: [],
             loading: true
+        }
+    },
+    computed: {
+        filteredDiscList() {
+            if(this.genreToSearch == "") {
+                return this.discList;
+            } else {
+                return this.discList.filter(disc => {
+                    return disc.genre.includes(this.genreToSearch);
+                });
+            }
         }
     },
     methods: {
@@ -37,23 +51,19 @@ export default {
             .then((response) => {
                 this.discList = response.data.response;
                 this.loading = false;
-                this.getGenres();
-                //console.log(this.discList); //confronta log
-                this.$emit('genresReady', this.genresList);
+                
+                this.discList.forEach(disc => {
+                    if (!this.genres.includes(disc.genre)) {
+                        this.genres.push(disc.genre);
+                    }
+                });
+                this.$emit('genresReady', this.genres);
                 // handle success
             })
             .catch(function (error) {
                 // handle error
                 console.log(error);
             })
-        },
-        getGenres() {
-            this.discList.forEach(disc => {
-                if (!this.genresList.includes(disc.genre)) {
-                    this.genresList.push(disc.genre);
-                }
-            });
-            //console.log(this.genresList); //confronta log
         }
     },
     mounted() {
